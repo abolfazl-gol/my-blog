@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package proto;
+
+message Post {
+    int64 id = 1;
+    int64 blog_id = 2;
+    int64 user_id = 3;
+    string title = 4;
+    string body = 5;
+    string slug = 6;
+}
+
+message ListPostsRequest {}
+message ListPostsResponse { repeated Post posts = 1; }
+message GetPostRequest { int64 id = 1; }
+
+message CreatePostRequest {
+  string title = 1;
+  string body = 2;
+}
+
+message UpdatePostRequest {
+  Post post = 1;
+  repeated string update_mask = 2;
+}
+message DeletePostRequest { int64 id = 1; }

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/protobuf/empty.proto";
+import "proto/user.proto";
+import "proto/blog.proto";
+import "proto/post.proto";
+
+service Api {
+  rpc Register(RegisterRequest) returns (User);
+  rpc Login(LoginRequest) returns (User);
+
+  rpc ListBlogs(ListBlogsRequest) returns (ListBlogsResponse) {};
+  rpc GetBlog(GetBlogRequest) returns (Blog) {};
+  rpc CreateBlog(CreateBlogRequest) returns (Blog) {};
+  rpc UpdateBlog(UpdateBlogRequest) returns (Blog) {};
+  rpc DeleteBlog(DeleteBlogRequest) returns (google.protobuf.Empty) {};
+
+  rpc ListPosts(ListPostsRequest) returns (ListPostsResponse) {};
+  rpc GetPost(GetPostRequest) returns (Post) {};
+  rpc CreatePost(CreatePostRequest) returns (Post) {};
+  rpc UpdatePost(UpdatePostRequest) returns (Post) {};
+  rpc DeletePost(DeletePostRequest) returns (google.protobuf.Empty) {};
+
+
+}
