@@ -12,8 +12,31 @@ import (
 )
 
 func (b *BlogService) ListBlogs(ctx context.Context, req *proto.ListBlogsRequest) (*proto.ListBlogsResponse, error) {
-	// user := ctx.Value("user_id").(*models.User)
-	return nil, status.Errorf(codes.Unimplemented, "method ListBlogs not implemented")
+	user := ctx.Value("user").(*models.User)
+
+	options := &models.FindBlogOptions{
+		UserID:  user.ID,
+		Page:    int(req.Page),
+		OrderBy: req.OrderBy,
+		SortBy:  req.SortBy,
+	}
+
+	blogs, err := models.FindBlogs(options)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "%v", err)
+	}
+
+	protoBlogs := make([]*proto.Blog, 0)
+	for _, blogs := range blogs {
+		protoBlogs = append(protoBlogs, blogs.ToProto())
+	}
+
+	nextPage := req.Page + 1
+	if len(blogs) < options.Limit {
+		nextPage = 0
+	}
+
+	return &proto.ListBlogsResponse{Blogs: protoBlogs, NextPage: nextPage}, nil
 }
 func (b *BlogService) GetBlog(ctx context.Context, req *proto.GetBlogRequest) (*proto.Blog, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBlog not implemented")

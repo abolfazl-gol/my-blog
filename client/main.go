@@ -26,9 +26,10 @@ func main() {
 	// }
 	// fmt.Println(user)
 
-	blog, err := client.CreateBlog(ctx, &proto.CreateBlogRequest{Name: "بلاگ", Title: "بلاگر ", Description: "Hi! Welcom to blog"})
+	// blog, err := client.CreateBlog(ctx, &proto.CreateBlogRequest{Name: "بلاگ", Title: "بلاگر ", Description: "Hi! Welcom to blog"})
+	blogs, err := client.ListBlogs(ctx, &proto.ListBlogsRequest{OrderBy: "asc"})
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(blog)
+	fmt.Println(blogs)
 }

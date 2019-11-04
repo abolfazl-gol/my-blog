@@ -11,8 +11,17 @@ message Blog {
     string slug = 6;
 }
 
-message ListBlogsRequest {}
-message ListBlogsResponse { repeated Blog blogs = 1; }
+message ListBlogsRequest {
+  int32 page = 1;
+  string sort_by = 2;
+  string order_by = 3;
+}
+
+message ListBlogsResponse { 
+  repeated Blog blogs = 1;
+  int32 next_page = 2;
+}
+
 message GetBlogRequest { int64 id = 1; }
 
 message CreateBlogRequest {
