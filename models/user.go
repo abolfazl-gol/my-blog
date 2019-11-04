@@ -4,6 +4,7 @@ import (
 	"blog/pkg/invalid"
 	"blog/proto"
 	"database/sql"
+	"fmt"
 	"strings"
 	"time"
 
@@ -43,6 +44,18 @@ func CreateUser(user *User) error {
 	return createUser(engine, user)
 }
 
+func GetUserByEmail(email string) (*User, error) {
+	return getUserBy(engine, "email", email)
+}
+
+func GetUserByToken(token string) (*User, error) {
+	return getUserBy(engine, "token", token)
+}
+
+func GetUserByID(id int64) (*User, error) {
+	return getUserBy(engine, "id", id)
+}
+
 func createUser(e Engine, user *User) error {
 	if _, err := e.Insert(user); err != nil {
 		if strings.Contains(err.Error(), "1062") {
@@ -54,45 +67,11 @@ func createUser(e Engine, user *User) error {
 	return nil
 }
 
-func GetUserByEmail(email string) (*User, error) {
-	return getUserByEmail(engine, email)
-}
-
-func getUserByEmail(e Engine, email string) (*User, error) {
+func getUserBy(e Engine, column string, value interface{}) (*User, error) {
 	user := new(User)
-	if _, err := e.Where("email = ?", email).Get(user); err != nil {
+	if _, err := e.Where(fmt.Sprintf("%s = ?", column), value).Get(user); err != nil {
 		if err == sql.ErrNoRows {
-			return nil, invalid.ErrNotFound{"User", "email", user.Email}
-		}
-		return nil, err
-	}
-	return user, nil
-}
-
-func GetUserByToken(token string) (*User, error) {
-	return getUserByToken(engine, token)
-}
-
-func getUserByToken(e Engine, token string) (*User, error) {
-	user := new(User)
-	if _, err := e.Where("token = ?", token).Get(user); err != nil {
-		if err == sql.ErrNoRows {
-			return nil, invalid.ErrNotFound{"User", "token", user.Token}
-		}
-		return nil, err
-	}
-	return user, nil
-}
-
-func GetUserById(id interface{}) (*User, error) {
-	return getUserById(engine, id.(int64))
-}
-
-func getUserById(e Engine, id int64) (*User, error) {
-	user := new(User)
-	if _, err := e.Where("id = ?", id).Get(user); err != nil {
-		if err == sql.ErrNoRows {
-			return nil, invalid.ErrNotFound{"User", "id", user.ID}
+			return nil, invalid.ErrNotFound{"User", column, value}
 		}
 		return nil, err
 	}
