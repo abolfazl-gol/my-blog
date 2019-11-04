@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package proto;
+import "google/protobuf/field_mask.proto";
 
 message Blog {
     int64 id = 1;
@@ -22,7 +23,7 @@ message ListBlogsResponse {
   int32 next_page = 2;
 }
 
-message GetBlogRequest { int64 id = 1; }
+message GetBlogRequest { int64 blog_id = 1; }
 
 message CreateBlogRequest {
   string name = 1;
@@ -32,6 +33,6 @@ message CreateBlogRequest {
 
 message UpdateBlogRequest {
   Blog blog = 1;
-  repeated string update_mask = 2;
+  google.protobuf.FieldMask update_mask = 2;
 }
 message DeleteBlogRequest { int64 id = 1; }
