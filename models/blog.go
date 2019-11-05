@@ -123,3 +123,12 @@ func updateBlog(e Engine, blog *Blog, cols ...string) error {
 	}
 	return nil
 }
+func DeleteBlog(id int64) error {
+	return deleteBlog(engine, id)
+}
+func deleteBlog(e Engine, id int64) error {
+	if _, err := e.Delete(&Blog{ID: id}); err != nil {
+		return err
+	}
+	return nil
+}
