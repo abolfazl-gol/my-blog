@@ -35,4 +35,4 @@ message UpdateBlogRequest {
   Blog blog = 1;
   google.protobuf.FieldMask update_mask = 2;
 }
-message DeleteBlogRequest { int64 id = 1; }
+message DeleteBlogRequest { int64 blog_id = 1; }
