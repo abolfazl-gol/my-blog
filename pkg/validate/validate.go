@@ -18,3 +18,14 @@ func RegisterReq(req *proto.RegisterRequest) error {
 
 	return nil
 }
+
+func ValidateBlog(req *proto.CreateBlogRequest) error {
+	if err := v.Var(req.Name, "alphanum"); err != nil {
+		return fmt.Errorf("Name must by alpha")
+	}
+
+	if err := v.Var(req.Title, "min=6,max=50"); err != nil {
+		return fmt.Errorf("Title must be between 6 and 50 chars")
+	}
+	return nil
+}
