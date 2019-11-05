@@ -3,6 +3,7 @@ package server
 import (
 	"blog/models"
 	"blog/pkg/invalid"
+	"blog/pkg/validate"
 	"blog/proto"
 	"context"
 	"log"
@@ -59,6 +60,10 @@ func (b *BlogService) GetBlog(ctx context.Context, req *proto.GetBlogRequest) (*
 func (b *BlogService) CreateBlog(ctx context.Context, req *proto.CreateBlogRequest) (*proto.Blog, error) {
 	user := ctx.Value("user").(*models.User)
 
+	if err := validate.ValidateBlog(req); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "[ValidateBlog]: %v", err)
+	}
+
 	blog := &models.Blog{
 		Name:        req.Name,
 		Title:       req.Title,
@@ -81,7 +86,7 @@ func (b *BlogService) UpdateBlog(ctx context.Context, req *proto.UpdateBlogReque
 	user := ctx.Value("user").(*models.User)
 
 	if req.Blog == nil {
-		return nil, status.Error(codes.InvalidArgument, "Account must be set")
+		return nil, status.Error(codes.InvalidArgument, "Blog must be set")
 	}
 
 	if len(req.UpdateMask.Paths) == 0 {
@@ -138,5 +143,21 @@ func (b *BlogService) UpdateBlog(ctx context.Context, req *proto.UpdateBlogReque
 	return newBlog.ToProto(), nil
 }
 func (b *BlogService) DeleteBlog(ctx context.Context, req *proto.DeleteBlogRequest) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteBlog not implemented")
+	user := ctx.Value("user").(*models.User)
+
+	blog, err := models.GetBlog(&models.GetBlogOption{ID: req.Id, UserID: user.ID})
+	if err != nil {
+		log.Println("[DeleteBlog] can't GetBlog:", err)
+		if invalid.IsErrorNotFound(err) {
+			return nil, status.Errorf(codes.NotFound, "%v", err)
+		}
+		return nil, status.Errorf(codes.Internal, "%v", err)
+	}
+
+	if err := models.DeleteBlog(blog.ID); err != nil {
+		log.Println("[DeleteBlog] can't DeleteBlog:", err)
+		return nil, status.Errorf(codes.Internal, "%v", err)
+	}
+
+	return &empty.Empty{}, nil
 }
