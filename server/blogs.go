@@ -19,7 +19,7 @@ import (
 func (b *BlogService) ListBlogs(ctx context.Context, req *proto.ListBlogsRequest) (*proto.ListBlogsResponse, error) {
 	user := ctx.Value("user").(*models.User)
 
-	options := &models.FindBlogOptions{
+	options := &models.FindOptions{
 		UserID:  user.ID,
 		Page:    int(req.Page),
 		OrderBy: req.OrderBy,
@@ -145,7 +145,7 @@ func (b *BlogService) UpdateBlog(ctx context.Context, req *proto.UpdateBlogReque
 func (b *BlogService) DeleteBlog(ctx context.Context, req *proto.DeleteBlogRequest) (*empty.Empty, error) {
 	user := ctx.Value("user").(*models.User)
 
-	blog, err := models.GetBlog(&models.GetBlogOption{ID: req.Id, UserID: user.ID})
+	blog, err := models.GetBlog(&models.GetBlogOption{ID: req.BlogId, UserID: user.ID})
 	if err != nil {
 		log.Println("[DeleteBlog] can't GetBlog:", err)
 		if invalid.IsErrorNotFound(err) {
