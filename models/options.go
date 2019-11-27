@@ -1,12 +1,13 @@
 package models
 
-type FindBlogOptions struct {
+type FindOptions struct {
+	BlogID              int64
 	UserID              int64
 	OrderBy, SortBy     string
 	Page, Limit, Offset int
 }
 
-func (op *FindBlogOptions) Parse() {
+func (op *FindOptions) Parse() {
 	if op.Page <= 0 {
 		op.Page = 1
 	}
