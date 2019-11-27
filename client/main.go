@@ -26,10 +26,30 @@ func main() {
 	// }
 	// fmt.Println(user)
 
-	// blog, err := client.CreateBlog(ctx, &proto.CreateBlogRequest{Name: "بلاگ", Title: "بلاگر ", Description: "Hi! Welcom to blog"})
-	blogs, err := client.ListBlogs(ctx, &proto.ListBlogsRequest{OrderBy: "asc"})
+	blog, err := client.CreateBlog(ctx, &proto.CreateBlogRequest{Name: "MyBlo//gs", Title: "blog ", Description: "Hi! Welcom to blog"})
+	// blogs, err := client.ListBlogs(ctx, &proto.ListBlogsRequest{OrderBy: "asc"})
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(blogs)
+	fmt.Println(blog)
+	// blog, err := client.GetBlog(ctx, &proto.GetBlogRequest{BlogId: 11})
+	// blog, err := client.UpdateBlog(ctx, &proto.UpdateBlogRequest{
+	// 	Blog: &proto.Blog{
+	// 		Id:          11,
+	// 		Name:        "Good by",
+	// 		Title:       "welcom",
+	// 		Description: "heeeellllooo",
+	// 	},
+	// 	UpdateMask: &field_mask.FieldMask{
+	// 		Paths: []string{"blog.name", "blog.title", "blog.description"},
+	// 	},
+	// })
+	// blog, err := client.DeleteBlog(ctx, &proto.DeleteBlogRequest{BlogId: 14})
+	// posts, err := client.ListPosts(ctx, &proto.ListPostsRequest{OrderBy: "asc", BlogId: 13})
+	// post, err := client.GetPost(ctx, &proto.GetPostRequest{PostId: 9, BlogId: 6})
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println(post)
+
 }

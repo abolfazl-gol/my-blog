@@ -79,7 +79,7 @@ func (b *BlogService) GetPost(ctx context.Context, req *proto.GetPostRequest) (*
 }
 
 func (b *BlogService) CreatePost(ctx context.Context, req *proto.CreatePostRequest) (*proto.Post, error) {
-	user := ctx.Value("user").(*models.User)
+	// user := ctx.Value("user").(*models.User)
 
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePost not implemented")
 }
