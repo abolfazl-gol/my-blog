@@ -7,7 +7,6 @@ import "google/protobuf/field_mask.proto";
 message Post {
     int64 id = 1;
     int64 blog_id = 2;
-    string user_name = 3;
     string title = 4;
     string body = 5;
     string slug = 6;
