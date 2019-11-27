@@ -48,7 +48,11 @@ func UpdateBlog(blog *Blog, cols ...string) error {
 	return updateBlog(engine, blog, cols...)
 }
 
-func FindBlogs(opts *FindBlogOptions) ([]*Blog, error) {
+func DeleteBlog(id int64) error {
+	return deleteBlog(engine, id)
+}
+
+func FindBlogs(opts *FindOptions) ([]*Blog, error) {
 	opts.Parse()
 
 	sess := engine.NewSession()
@@ -123,9 +127,7 @@ func updateBlog(e Engine, blog *Blog, cols ...string) error {
 	}
 	return nil
 }
-func DeleteBlog(id int64) error {
-	return deleteBlog(engine, id)
-}
+
 func deleteBlog(e Engine, id int64) error {
 	if _, err := e.Delete(&Blog{ID: id}); err != nil {
 		return err
